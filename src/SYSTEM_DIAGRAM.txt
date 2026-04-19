@@ -1,0 +1,428 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                         NEUROPLAY SYSTEM ARCHITECTURE                         ║
+║                              v2.0 - Full Stack                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│                            FRONTEND (React App)                               │
+│                          Hosted on Vercel/Netlify                             │
+└───────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    │                 │                 │
+                    ▼                 ▼                 ▼
+         ┌──────────────────┐ ┌──────────────┐ ┌──────────────┐
+         │   KID MODE       │ │  CAREGIVER   │ │  ADMIN MODE  │
+         │   (Offline)      │ │    MODE      │ │  (Offline)   │
+         │                  │ │  (Database)  │ │              │
+         │  Routes:         │ │  Routes:     │ │  Routes:     │
+         │  • /             │ │  • /cg-login │ │  • /admin    │
+         │  • /dashboard    │ │  • /cg-dash  │ │  • /admin/*  │
+         │  • /quiz         │ │              │ │              │
+         └──────────────────┘ └──────────────┘ └──────────────┘
+                    │                 │                 │
+                    ▼                 ▼                 ▼
+         ┌──────────────────┐ ┌──────────────┐ ┌──────────────┐
+         │  localStorage    │ │  API Client  │ │ localStorage │
+         │                  │ │              │ │              │
+         │  • User profile  │ │ /utils/api   │ │ • Admin auth │
+         │  • Quiz results  │ │              │ │ • User mgmt  │
+         │  • Preferences   │ │ • HTTP calls │ │              │
+         └──────────────────┘ └──────────────┘ └──────────────┘
+                                      │
+                                      │ HTTPS/REST
+                                      │
+                    ┌─────────────────┴─────────────────┐
+                    │                                   │
+                    ▼                                   ▼
+         ╔══════════════════════════╗        ╔══════════════════════════╗
+         ║   BACKEND API SERVER     ║        ║   API ENDPOINTS          ║
+         ║   Deno + Hono Framework  ║        ║                          ║
+         ║   Hosted on Deno Deploy  ║        ║  POST /caregivers        ║
+         ╚══════════════════════════╝        ║  POST /caregivers/login  ║
+                    │                        ║  POST /children          ║
+                    │                        ║  GET  /children/:id      ║
+                    ▼                        ║  POST /sessions          ║
+         ┌──────────────────┐                ║  GET  /sessions/:id      ║
+         │  KV Store Layer  │                ║  GET  /stats/:childId    ║
+         │  (kv_store.tsx)  │                ║  GET  /health            ║
+         │                  │                ╚══════════════════════════╝
+         │  • get(key)      │
+         │  • set(key, val) │
+         │  • getByPrefix() │
+         │  • del(key)      │
+         └──────────────────┘
+                    │
+                    │ Supabase Client
+                    │
+                    ▼
+         ╔══════════════════════════════════════════════════════════════╗
+         ║                    SUPABASE DATABASE                         ║
+         ║                  (PostgreSQL Cloud)                          ║
+         ╚══════════════════════════════════════════════════════════════╝
+                    │
+                    ▼
+         ┌──────────────────────────────────────────────────────────────┐
+         │  Table: kv_store_3f317989                                    │
+         ├──────────────────────────────────────────────────────────────┤
+         │  Columns:                                                    │
+         │  • key          TEXT PRIMARY KEY                             │
+         │  • value        JSONB NOT NULL                               │
+         │  • created_at   TIMESTAMPTZ DEFAULT NOW()                    │
+         │  • updated_at   TIMESTAMPTZ DEFAULT NOW()                    │
+         ├──────────────────────────────────────────────────────────────┤
+         │  Indexes:                                                    │
+         │  • PRIMARY KEY on key                                        │
+         │  • Index on key (for fast lookups)                           │
+         │  • Index on key (for prefix searches)                        │
+         ├──────────────────────────────────────────────────────────────┤
+         │  Sample Data:                                                │
+         │  caregiver:{uuid}               → {id, email, name...}       │
+         │  caregiver:email:{email}        → uuid                       │
+         │  caregiver:{uuid}:children      → [child_id1, child_id2]     │
+         │  child:{uuid}                   → {id, name, age...}         │
+         │  child:{uuid}:sessions          → [session_id1, session_id2] │
+         │  session:{uuid}                 → {gameData, scores...}      │
+         └──────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                           DATA FLOW DIAGRAM                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SCENARIO 1: Kid Takes Quiz (Standalone Mode)                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+   User             Login Page        Quiz Page         Dashboard      localStorage
+    │                   │                 │                  │               │
+    │  Access /         │                 │                  │               │
+    ├──────────────────>│                 │                  │               │
+    │                   │                 │                  │               │
+    │  Create Account   │                 │                  │               │
+    ├──────────────────>│─────Save─────────────────────────────────────────>│
+    │                   │                 │                  │               │
+    │  Start Quiz       │                 │                  │               │
+    ├───────────────────┼────────────────>│                  │               │
+    │                   │                 │                  │               │
+    │  Complete 15      │                 │                  │               │
+    │  Challenges       │                 │                  │               │
+    ├───────────────────┼────────────────>│                  │               │
+    │                   │                 │                  │               │
+    │                   │                 │  Save Results    │               │
+    │                   │                 ├──────────────────────────────────>│
+    │                   │                 │                  │               │
+    │  View Dashboard   │                 │                  │               │
+    ├───────────────────┼─────────────────┼─────────────────>│               │
+    │                   │                 │                  │               │
+    │                   │                 │                  │  Read Results │
+    │                   │                 │                  │<──────────────│
+    │  Display Profile  │                 │                  │               │
+    │<──────────────────┼─────────────────┼──────────────────│               │
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SCENARIO 2: Caregiver Manages Children (Database Mode)                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ Caregiver    CG Login    CG Dashboard    Backend API    Supabase     Child
+    │             │             │               │            │          │
+    │  Access     │             │               │            │          │
+    │  /cg-login  │             │               │            │          │
+    ├────────────>│             │               │            │          │
+    │             │             │               │            │          │
+    │  Sign Up    │             │               │            │          │
+    ├────────────>│ POST /caregivers            │            │          │
+    │             ├────────────────────────────>│            │          │
+    │             │             │               │            │          │
+    │             │             │               │  INSERT    │          │
+    │             │             │               ├───────────>│          │
+    │             │             │               │            │          │
+    │             │  Success    │               │            │          │
+    │<────────────┤<────────────────────────────┤            │          │
+    │             │             │               │            │          │
+    │  View       │             │               │            │          │
+    │  Dashboard  │             │               │            │          │
+    ├────────────────────────────>│             │            │          │
+    │             │             │               │            │          │
+    │             │             │ GET /children │            │          │
+    │             │             ├──────────────>│            │          │
+    │             │             │               │  SELECT    │          │
+    │             │             │               ├───────────>│          │
+    │             │             │               │            │          │
+    │             │  Display    │               │            │          │
+    │<────────────┤─────────────┤               │            │          │
+    │             │             │               │            │          │
+    │  Add Child  │             │               │            │          │
+    ├────────────────────────────>│ POST /children           │          │
+    │             │             ├──────────────>│            │          │
+    │             │             │               │  INSERT    │          │
+    │             │             │               ├───────────>│          │
+    │             │             │               │            │          │
+    │  Start Quiz │             │               │            │          │
+    │  for Child  │             │               │            │          │
+    ├────────────────────────────>│             │            │          │
+    │             │             │               │            │          │
+    │             │             │  (Child completes quiz)    │          │
+    │             │             │               │            │<─────────┤
+    │             │             │               │            │          │
+    │             │             │ POST /sessions│            │          │
+    │             │             ├──────────────>│            │          │
+    │             │             │               │  INSERT    │          │
+    │             │             │               ├───────────>│          │
+    │             │             │               │            │          │
+    │  View Stats │             │               │            │          │
+    ├────────────────────────────>│ GET /stats  │            │          │
+    │             │             ├──────────────>│            │          │
+    │             │             │               │  SELECT +  │          │
+    │             │             │               │  AGGREGATE │          │
+    │             │             │               ├───────────>│          │
+    │             │             │               │            │          │
+    │  Display    │             │               │            │          │
+    │  Analytics  │             │               │            │          │
+    │<────────────┤─────────────┤               │            │          │
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                         TECHNOLOGY STACK                                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  FRONTEND STACK                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  • React 18              - UI library                                         │
+│  • TypeScript 5          - Type safety                                        │
+│  • Tailwind CSS v4       - Utility-first styling                              │
+│  • Motion (Framer)       - Smooth animations                                  │
+│  • React Router v7       - Client-side routing                                │
+│  • Web Speech API        - Text-to-speech                                     │
+│  • Lucide React          - Icon library                                       │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  BACKEND STACK                                                                │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  • Deno 1.x              - Modern JavaScript runtime                          │
+│  • Hono                  - Lightweight web framework                          │
+│  • Supabase Client       - Database SDK                                       │
+│  • CORS Middleware       - Cross-origin requests                              │
+│  • Logger Middleware     - Request logging                                    │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  DATABASE STACK                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  • Supabase              - PostgreSQL cloud database                          │
+│  • PostgreSQL 15         - Relational database engine                         │
+│  • JSONB                 - Flexible schema storage                            │
+│  • Row Level Security    - Fine-grained access control                        │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  DEPLOYMENT STACK                                                             │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  • Vercel/Netlify        - Frontend hosting + CDN                             │
+│  • Deno Deploy           - Backend serverless hosting                         │
+│  • Supabase Cloud        - Managed PostgreSQL                                 │
+│  • GitHub                - Version control & CI/CD                            │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                      DEPLOYMENT ARCHITECTURE                                  ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+                            ┌─────────────┐
+                            │   INTERNET  │
+                            └──────┬──────┘
+                                   │
+                ┌──────────────────┼──────────────────┐
+                │                  │                  │
+                ▼                  ▼                  ▼
+       ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+       │   VERCEL/      │ │  DENO DEPLOY   │ │   SUPABASE     │
+       │   NETLIFY      │ │                │ │                │
+       │                │ │  Region: US    │ │  Region: US    │
+       │  Region: Edge  │ │  Auto-scale    │ │  Managed       │
+       │  CDN: Global   │ │  Serverless    │ │  PostgreSQL    │
+       └────────────────┘ └────────────────┘ └────────────────┘
+                │                  │                  │
+                │                  │                  │
+       ┌────────┴────────┐ ┌───────┴────────┐ ┌──────┴─────────┐
+       │  Static Assets  │ │  API Endpoints │ │  Data Storage  │
+       │  • HTML         │ │  • REST API    │ │  • Users       │
+       │  • CSS          │ │  • CORS        │ │  • Children    │
+       │  • JS Bundle    │ │  • Logging     │ │  • Sessions    │
+       │  • Images       │ │                │ │  • Statistics  │
+       └─────────────────┘ └────────────────┘ └────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                          FILE STRUCTURE                                       ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+neuroplay/
+│
+├─ 📄 Documentation Files
+│  ├─ README.md                    Main project documentation
+│  ├─ QUICK_START.md               5-minute setup guide
+│  ├─ BACKEND_SETUP.md             Backend deployment guide
+│  ├─ DEPLOYMENT_CHECKLIST.md     Step-by-step deployment
+│  ├─ INTEGRATION_SUMMARY.md      Features overview
+│  ├─ ARCHITECTURE.md              System diagrams
+│  ├─ PROJECT_SUMMARY.md           Complete summary
+│  ├─ CHANGELOG.md                 Version history
+│  └─ SYSTEM_DIAGRAM.txt           This file!
+│
+├─ 🗄️ Database Files
+│  ├─ backend-schema.sql           Supabase table schema
+│  ├─ .env.example                 Frontend env template
+│  └─ backend.env.example          Backend env template
+│
+├─ 🎨 Frontend Application
+│  ├─ App.tsx                      Main component
+│  ├─ routes.ts                    Route configuration
+│  │
+│  ├─ 📁 pages/
+│  │  ├─ Login.tsx                 Kid login
+│  │  ├─ KidDashboard.tsx          Kid profile
+│  │  ├─ QuizGame.tsx              15 challenges
+│  │  ├─ CaregiverLogin.tsx        ⭐ NEW - Caregiver auth
+│  │  ├─ CaregiverDashboard.tsx    ⭐ NEW - Caregiver portal
+│  │  ├─ AdminUsers.tsx            Admin panel
+│  │  └─ AdminProfileView.tsx      User management
+│  │
+│  ├─ 📁 components/
+│  │  ├─ AccessibilityMenu.tsx     TTS, contrast, calm mode
+│  │  ├─ ApiStatusBadge.tsx        ⭐ NEW - Connection status
+│  │  ├─ ProgressBar.tsx           Quiz progress
+│  │  ├─ ResultsProfile.tsx        Results display
+│  │  │
+│  │  └─ 📁 challenges/            (15 quiz challenges)
+│  │     ├─ ColorComfort.tsx
+│  │     ├─ SoundSelector.tsx
+│  │     ├─ SpeedPreference.tsx
+│  │     ├─ MemoryGame.tsx
+│  │     ├─ PatternMatch.tsx
+│  │     ├─ SymbolRecognition.tsx
+│  │     ├─ VisualReasoning.tsx
+│  │     ├─ SequencingTask.tsx
+│  │     ├─ MultiStepInstruction.tsx
+│  │     ├─ RuleSwitch.tsx
+│  │     ├─ GreenLightGame.tsx
+│  │     ├─ StickToIt.tsx
+│  │     ├─ EmotionMatch.tsx
+│  │     ├─ SocialCue.tsx
+│  │     └─ TurnTaking.tsx
+│  │
+│  └─ 📁 utils/
+│     ├─ api.ts                    ⭐ NEW - Backend API client
+│     └─ textToSpeech.ts           TTS utilities
+│
+└─ 🔧 Configuration
+   ├─ .gitignore                   Git ignore rules
+   ├─ package.json                 Dependencies
+   └─ tsconfig.json                TypeScript config
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    ACCESSIBILITY FEATURES                                     ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  ACCESSIBILITY MENU (⚙️ Gear Icon - Bottom Right)                            │
+├───────────────────────────────────────────────────────────────────────────────┤
+│                                                                               │
+│  🔊 READ TO ME                                                                │
+│     • Full text-to-speech support                                            │
+│     • Click any text to hear it read aloud                                   │
+│     • Web Speech API integration                                             │
+│     • Adjustable speed and voice                                             │
+│                                                                               │
+│  🎨 BOLD COLORS                                                               │
+│     • High contrast mode                                                      │
+│     • Increased color saturation                                             │
+│     • Better visibility for low vision                                       │
+│     • WCAG AAA compliant                                                     │
+│                                                                               │
+│  😌 CALM MODE                                                                 │
+│     • Reduced animations                                                      │
+│     • Respects prefers-reduced-motion                                        │
+│     • Gentler transitions                                                    │
+│     • Sensory-friendly experience                                            │
+│                                                                               │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  BUILT-IN ACCESSIBILITY                                                       │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  • Large touch targets (min 44x44px)                                          │
+│  • Semantic HTML structure                                                    │
+│  • Keyboard navigation support                                                │
+│  • Focus indicators on all interactive elements                               │
+│  • Screen reader compatible (ARIA labels)                                     │
+│  • Pastel color palette (autism-friendly)                                     │
+│  • Clear visual hierarchy                                                     │
+│  • Ample white space                                                          │
+│  • Emoji for visual context                                                   │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                         QUICK REFERENCE                                       ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  IMPORTANT URLS                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  Development:                                                                 │
+│    Frontend:  http://localhost:5173                                           │
+│    Backend:   http://localhost:8000                                           │
+│                                                                               │
+│  Production:                                                                  │
+│    Frontend:  https://your-app.vercel.app                                     │
+│    Backend:   https://your-project.deno.dev                                   │
+│    Database:  https://app.supabase.com/project/YOUR_PROJECT                   │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  USER ROUTES                                                                  │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  Kids:        /                                                               │
+│               /dashboard                                                      │
+│               /quiz                                                           │
+│                                                                               │
+│  Caregivers:  /caregiver-login                                                │
+│               /caregiver-dashboard                                            │
+│                                                                               │
+│  Admins:      /admin                                                          │
+│               /admin/profile/:username                                        │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  ADMIN CREDENTIALS                                                            │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  Password:    neuroplay2024                                                   │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│  QUICK COMMANDS                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+│  npm install          Install dependencies                                    │
+│  npm run dev          Start development server                                │
+│  npm run build        Build for production                                    │
+│  npm run preview      Preview production build                                │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    🎉 CONGRATULATIONS! 🎉                                     ║
+║                                                                               ║
+║          Your NeuroPlay application is fully integrated and ready!            ║
+║                                                                               ║
+║                  Choose your deployment mode:                                 ║
+║                  • Standalone (offline) - Works immediately                   ║
+║                  • Database (cloud) - 15-minute setup                         ║
+║                                                                               ║
+║                See QUICK_START.md to get started! 🚀                          ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
