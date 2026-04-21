@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from "framer-motion";
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Heart, LogIn, UserPlus, Shield, ArrowLeft, Database, HardDrive } from 'lucide-react';
