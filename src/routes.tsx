@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
 import KidDashboard from "./pages/KidDashboard";
 import QuizGame from "./pages/QuizGame";
