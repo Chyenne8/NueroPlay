@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Eye, EyeOff, Palette, Type, Minus, Plus } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { tts } from '../utils/textToSpeech';
 
 export function AccessibilityMenu() {
