@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from "framer-motion";
 import { Shield, AlertCircle, Check, X, Info, Lock, Database, Eye, Users } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
