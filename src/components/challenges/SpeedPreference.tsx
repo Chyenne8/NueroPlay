@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from "framer-motion";
 import { Rabbit, Turtle } from 'lucide-react';
 import { GameData } from '../../types/game';
 
