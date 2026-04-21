@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from "framer-motion";
 import { Card } from './ui/card';
 import { Sparkles, TrendingUp, Target, Heart } from 'lucide-react';
 import { Button } from './ui/button';
