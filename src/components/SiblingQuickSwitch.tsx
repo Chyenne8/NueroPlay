@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Users, LogIn, X } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { AvatarDisplay } from './AvatarDisplay';
 
 interface SiblingProfile {
