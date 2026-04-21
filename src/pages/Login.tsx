@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Sparkles, Rocket, Star, Heart, LogIn, UserPlus, HelpCircle, Key, Shield } from 'lucide-react';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
