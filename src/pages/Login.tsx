@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Rocket, Star, Heart, LogIn, UserPlus, CircleHelp as HelpCircle, Key, Shield } from 'lucide-react';
+import { Sparkles, Rocket, Star, Heart, LogIn, UserPlus, CircleHelp as HelpCircle, Key, Shield, Zap, Trophy } from 'lucide-react';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { AccessibilityMenu } from '../components/AccessibilityMenu';
@@ -96,33 +96,52 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-100 to-blue-200 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-rose-300 via-fuchsia-200 to-cyan-300 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-orange-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40"
+          animate={{ y: [0, -40, 0], x: [0, 30, 0] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute top-1/2 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-300 to-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40"
+          animate={{ y: [0, 40, 0], x: [0, -30, 0] }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute -bottom-1/2 left-1/2 w-96 h-96 bg-gradient-to-r from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40"
+          animate={{ y: [0, -30, 0] }}
+          transition={{ duration: 12, repeat: Infinity }}
+        />
+      </div>
+
       {/* Floating Decorations */}
       <motion.div
-        className="absolute top-10 left-10 text-6xl"
-        animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-        transition={{ duration: 3, repeat: Infinity }}
+        className="absolute top-10 left-10 text-7xl drop-shadow-lg"
+        animate={{ y: [0, -20, 0], rotate: [0, 15, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 4, repeat: Infinity }}
       >
         🎮
       </motion.div>
       <motion.div
-        className="absolute top-20 right-20 text-6xl"
-        animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
-        transition={{ duration: 4, repeat: Infinity }}
+        className="absolute top-1/4 right-12 text-8xl drop-shadow-lg"
+        animate={{ y: [0, 30, 0], rotate: [0, -15, 0], scale: [1, 1.2, 1] }}
+        transition={{ duration: 5, repeat: Infinity }}
       >
         🚀
       </motion.div>
       <motion.div
-        className="absolute bottom-20 left-20 text-6xl"
-        animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
+        className="absolute bottom-1/4 left-8 text-7xl drop-shadow-lg"
+        animate={{ y: [0, -15, 0], rotate: [0, 10, 0] }}
         transition={{ duration: 3.5, repeat: Infinity }}
       >
         🌈
       </motion.div>
       <motion.div
-        className="absolute bottom-10 right-10 text-6xl"
-        animate={{ y: [0, 15, 0], rotate: [0, -5, 0] }}
-        transition={{ duration: 2.5, repeat: Infinity }}
+        className="absolute bottom-12 right-16 text-7xl drop-shadow-lg"
+        animate={{ y: [0, 20, 0], rotate: [0, -20, 0], scale: [1, 1.15, 1] }}
+        transition={{ duration: 4.5, repeat: Infinity }}
       >
         ✨
       </motion.div>
@@ -130,189 +149,251 @@ export default function Login() {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
         className="w-full max-w-md z-10"
       >
-        <Card className="p-8 shadow-2xl border border-purple-200 bg-white/95 backdrop-blur-md rounded-2xl">
-          {/* Logo/Title */}
-          <div className="text-center mb-8">
+        <Card className="p-8 shadow-2xl border-2 border-white/50 bg-white/98 backdrop-blur-lg rounded-3xl overflow-hidden relative">
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white via-transparent to-purple-50 opacity-50 pointer-events-none" />
+
+          <div className="relative z-10">
+            {/* Logo/Title */}
+            <div className="text-center mb-8">
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="inline-block mb-4 relative"
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400 rounded-full blur-lg opacity-60"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+                <img src={logo} alt="NeuroPlay Logo" className="w-28 h-28 mx-auto relative" />
+              </motion.div>
+              <motion.h1
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 mb-2 cursor-pointer"
+                onClick={() => tts.speak('NeuroPlay Adventure')}
+              >
+                NeuroPlay Adventure
+              </motion.h1>
+              <motion.p
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-gray-700 text-base font-semibold cursor-pointer"
+                onClick={() => tts.speak(isSignup ? 'Create your adventure profile!' : 'Welcome back, adventurer!')}
+              >
+                {isSignup ? 'Create your adventure profile! 🎨' : 'Welcome back, adventurer! ☀️'}
+              </motion.p>
+            </div>
+
+            {/* Toggle Between Login/Signup */}
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="inline-block mb-4"
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex gap-3 mb-8 bg-gradient-to-r from-orange-100 via-pink-100 to-purple-100 p-2 rounded-2xl shadow-lg border border-white/50"
             >
-              <img src={logo} alt="NeuroPlay Logo" className="w-20 h-20 mx-auto" />
+              <button
+                onClick={() => {
+                  setIsSignup(false);
+                  setError('');
+                }}
+                className={`flex-1 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
+                  !isSignup
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-xl scale-105'
+                    : 'text-gray-700 hover:bg-white/30'
+                }`}
+              >
+                <LogIn className="w-5 h-5" />
+                Login
+              </button>
+              <button
+                onClick={() => {
+                  setIsSignup(true);
+                  setError('');
+                }}
+                className={`flex-1 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
+                  isSignup
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-xl scale-105'
+                    : 'text-gray-700 hover:bg-white/30'
+                }`}
+              >
+                <UserPlus className="w-5 h-5" />
+                Sign Up
+              </button>
             </motion.div>
-            <h1
-              className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-1 cursor-pointer"
-              onClick={() => tts.speak('NeuroPlay Adventure')}
-            >
-              NeuroPlay Adventure
-            </h1>
-            <p
-              className="text-gray-600 text-sm cursor-pointer"
-              onClick={() => tts.speak(isSignup ? 'Create your adventure profile!' : 'Welcome back, adventurer!')}
-            >
-              {isSignup ? 'Create your adventure profile! 🎨' : 'Welcome back, adventurer! ☀️'}
-            </p>
-          </div>
 
-          {/* Toggle Between Login/Signup */}
-          <div className="flex gap-2 mb-6 bg-pink-100 p-1.5 rounded-xl">
-            <button
-              onClick={() => {
-                setIsSignup(false);
-                setError('');
-              }}
-              className={`flex-1 py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
-                !isSignup
-                  ? 'bg-white text-purple-600 shadow-lg'
-                  : 'text-purple-600 hover:bg-pink-50'
-              }`}
-            >
-              <LogIn className="w-4 h-4" />
-              Login
-            </button>
-            <button
-              onClick={() => {
-                setIsSignup(true);
-                setError('');
-              }}
-              className={`flex-1 py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
-                isSignup
-                  ? 'bg-white text-purple-600 shadow-lg'
-                  : 'text-purple-600 hover:bg-pink-50'
-              }`}
-            >
-              <UserPlus className="w-4 h-4" />
-              Sign Up
-            </button>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={isSignup ? handleSignup : handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-gray-800 mb-2 font-semibold text-sm">
-                Username
-              </label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your username"
-                className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all bg-white text-gray-800 placeholder-gray-500"
-                autoFocus
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-800 mb-2 font-semibold text-sm">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all bg-white text-gray-800 placeholder-gray-500"
-              />
-            </div>
-
-            {isSignup && (
-              <div>
-                <label className="block text-gray-800 mb-2 font-semibold text-sm">
-                  How old are you?
+            {/* Form */}
+            <form onSubmit={isSignup ? handleSignup : handleLogin} className="space-y-5">
+              <motion.div
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+              >
+                <label className="block text-gray-800 mb-2 font-bold text-sm">
+                  Username
                 </label>
                 <input
-                  type="number"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  placeholder="Your age"
-                  min="3"
-                  max="18"
-                  className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all bg-white text-gray-800 placeholder-gray-500"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your username"
+                  className="w-full px-5 py-3 border-2 border-purple-300 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-300/50 transition-all bg-gradient-to-br from-white to-purple-50 text-gray-800 placeholder-gray-400 shadow-sm"
+                  autoFocus
                 />
-              </div>
-            )}
+              </motion.div>
 
-            {error && (
               <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
               >
-                {error}
+                <label className="block text-gray-800 mb-2 font-bold text-sm">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  className="w-full px-5 py-3 border-2 border-purple-300 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-300/50 transition-all bg-gradient-to-br from-white to-purple-50 text-gray-800 placeholder-gray-400 shadow-sm"
+                />
+              </motion.div>
+
+              {isSignup && (
+                <motion.div
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.7 }}
+                >
+                  <label className="block text-gray-800 mb-2 font-bold text-sm">
+                    How old are you?
+                  </label>
+                  <input
+                    type="number"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    placeholder="Your age"
+                    min="3"
+                    max="18"
+                    className="w-full px-5 py-3 border-2 border-purple-300 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-300/50 transition-all bg-gradient-to-br from-white to-purple-50 text-gray-800 placeholder-gray-400 shadow-sm"
+                  />
+                </motion.div>
+              )}
+
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-gradient-to-r from-red-100 to-pink-100 border-2 border-red-300 text-red-700 px-4 py-3 rounded-xl text-sm font-semibold shadow-md"
+                >
+                  {error}
+                </motion.div>
+              )}
+
+              <motion.div
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-white py-4 font-bold rounded-xl hover:from-orange-600 hover:via-pink-600 hover:to-purple-600 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 text-lg"
+                >
+                  {isSignup ? (
+                    <>
+                      <Rocket className="w-5 h-5 mr-2 inline" />
+                      Start My Adventure!
+                    </>
+                  ) : (
+                    <>
+                      <Star className="w-5 h-5 mr-2 inline" />
+                      Let's Play!
+                    </>
+                  )}
+                </Button>
+              </motion.div>
+            </form>
+
+            {/* Forgot Password Link - Only show on Login */}
+            {!isSignup && (
+              <motion.div
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
+                className="mt-4 text-center"
+              >
+                <button
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-purple-600 hover:text-purple-800 text-sm transition-colors font-semibold inline-flex items-center gap-2 hover:gap-3"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  Forgot Password?
+                </button>
               </motion.div>
             )}
 
-            <Button
-              type="submit"
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+            {/* Fun Facts */}
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 1 }}
+              className="mt-8 p-5 bg-gradient-to-r from-orange-100 via-pink-100 to-purple-100 rounded-2xl border-2 border-white/50 shadow-lg"
             >
-              {isSignup ? (
-                <>
-                  <Rocket className="w-4 h-4 mr-2" />
-                  Start My Adventure!
-                </>
-              ) : (
-                <>
-                  <Star className="w-4 h-4 mr-2" />
-                  Let's Play!
-                </>
-              )}
-            </Button>
-          </form>
-
-          {/* Forgot Password Link - Only show on Login */}
-          {!isSignup && (
-            <div className="mt-4 text-center">
-              <button
-                onClick={() => setShowForgotPassword(true)}
-                className="text-purple-600 hover:text-purple-800 text-xs transition-colors font-medium inline-flex items-center gap-1"
-              >
-                <HelpCircle className="w-4 h-4" />
-                Forgot Password?
-              </button>
-            </div>
-          )}
-
-          {/* Fun Facts */}
-          <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
-            <div className="flex items-center gap-2 text-purple-700">
-              <Heart className="w-4 h-4 flex-shrink-0" />
-              <p className="text-xs font-medium">
-                {isSignup
-                  ? 'Join thousands of kids having fun learning!'
-                  : 'Your adventure is waiting for you!'}
-              </p>
-            </div>
+              <div className="flex items-center gap-3">
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Heart className="w-5 h-5 flex-shrink-0 text-red-500" />
+                </motion.div>
+                <p className="text-sm font-bold text-gray-800">
+                  {isSignup
+                    ? 'Join thousands of kids having fun learning!'
+                    : 'Your adventure is waiting for you!'}
+                </p>
+              </div>
+            </motion.div>
           </div>
         </Card>
 
-        {/* Hidden Admin Link */}
-        <div className="text-center mt-4 space-y-2">
-          <div className="flex justify-center gap-4">
+        {/* Bottom Links */}
+        <motion.div
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.1 }}
+          className="text-center mt-6 space-y-3 z-10 relative"
+        >
+          <div className="flex justify-center gap-3 flex-wrap">
             <button
               onClick={() => navigate('/admin')}
-              className="text-purple-600 hover:text-purple-800 text-xs font-medium transition-colors inline-flex items-center gap-1"
+              className="px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-xl font-bold text-xs shadow-lg hover:shadow-xl transition-all hover:scale-105 inline-flex items-center gap-2"
             >
-              <Shield className="w-3 h-3" />
+              <Shield className="w-4 h-4" />
               Admin Panel
             </button>
             <button
               onClick={() => navigate('/features')}
-              className="text-purple-600 hover:text-purple-800 text-xs font-medium transition-colors"
+              className="px-4 py-2 bg-gradient-to-r from-blue-400 to-cyan-500 text-white rounded-xl font-bold text-xs shadow-lg hover:shadow-xl transition-all hover:scale-105 inline-flex items-center gap-2"
             >
-              ✨ Features
+              <Sparkles className="w-4 h-4" />
+              Features
             </button>
           </div>
           <button
             onClick={() => navigate('/caregiver-login')}
-            className="text-purple-600 hover:text-purple-800 text-xs font-medium transition-colors"
+            className="px-4 py-2 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-xl font-bold text-xs shadow-lg hover:shadow-xl transition-all hover:scale-105 inline-flex items-center gap-2 mx-auto"
           >
-            👨‍👩‍👧 Caregiver Portal
+            <Heart className="w-4 h-4" />
+            Caregiver Portal
           </button>
-        </div>
+        </motion.div>
       </motion.div>
 
       {/* Accessibility Menu */}
@@ -320,60 +401,79 @@ export default function Login() {
 
       {/* Forgot Password Modal */}
       {showForgotPassword && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={() => setShowForgotPassword(false)}>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowForgotPassword(false)}>
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <Card className="p-8 max-w-md w-full shadow-2xl border-2 border-purple-200 bg-white rounded-2xl">
+            <Card className="p-8 max-w-md w-full shadow-2xl border-2 border-white/50 bg-white/98 rounded-3xl">
               <div className="text-center mb-6">
-                <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-full p-4 w-16 h-16 mx-auto mb-4">
-                  <Key className="w-8 h-8 text-white" />
-                </div>
-                <h2 className="text-gray-800 mb-2 font-bold">Need Help? 🤗</h2>
-                <p className="text-gray-600 text-sm">Ask a grown-up to help you!</p>
+                <motion.div
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="bg-gradient-to-br from-orange-400 via-pink-400 to-purple-400 rounded-full p-4 w-20 h-20 mx-auto mb-4 shadow-lg"
+                >
+                  <Key className="w-12 h-12 text-white" />
+                </motion.div>
+                <h2 className="text-gray-800 mb-2 font-black text-2xl">Need Help? 🤗</h2>
+                <p className="text-gray-600 text-sm font-semibold">Ask a grown-up to help you!</p>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-lg border border-purple-200 mb-6">
-                <h3 className="text-purple-900 mb-3 font-semibold text-sm text-center">What to do:</h3>
-                <div className="space-y-3 text-xs text-purple-800">
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg flex-shrink-0">1️⃣</span>
-                    <p>Ask a parent, teacher, or caregiver to help you</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg flex-shrink-0">2️⃣</span>
-                    <p>They can check what password you used when you signed up</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-lg flex-shrink-0">3️⃣</span>
-                    <p>Or you can create a new account with a new username!</p>
-                  </div>
+              <div className="bg-gradient-to-r from-orange-100 via-pink-100 to-purple-100 p-6 rounded-2xl border-2 border-white/50 mb-6 shadow-md">
+                <h3 className="text-gray-800 mb-4 font-black text-center">What to do:</h3>
+                <div className="space-y-3 text-sm text-gray-800">
+                  <motion.div
+                    initial={{ x: -10, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="flex items-start gap-3 bg-white/50 p-3 rounded-xl"
+                  >
+                    <span className="text-2xl flex-shrink-0">1️⃣</span>
+                    <p className="font-semibold">Ask a parent, teacher, or caregiver to help you</p>
+                  </motion.div>
+                  <motion.div
+                    initial={{ x: -10, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="flex items-start gap-3 bg-white/50 p-3 rounded-xl"
+                  >
+                    <span className="text-2xl flex-shrink-0">2️⃣</span>
+                    <p className="font-semibold">They can check what password you used when you signed up</p>
+                  </motion.div>
+                  <motion.div
+                    initial={{ x: -10, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="flex items-start gap-3 bg-white/50 p-3 rounded-xl"
+                  >
+                    <span className="text-2xl flex-shrink-0">3️⃣</span>
+                    <p className="font-semibold">Or you can create a new account with a new username!</p>
+                  </motion.div>
                 </div>
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
+              <div className="bg-gradient-to-r from-blue-100 to-cyan-100 p-5 rounded-2xl border-2 border-blue-300 mb-6 shadow-md">
                 <div className="flex gap-3">
-                  <HelpCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <motion.div animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                    <HelpCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                  </motion.div>
                   <div>
-                    <h4 className="text-blue-900 text-xs font-semibold mb-1">Tip for Grown-ups</h4>
-                    <p className="text-blue-800 text-xs">
+                    <h4 className="text-blue-900 text-sm font-black mb-1">Tip for Grown-ups 👨‍👩‍👧‍👦</h4>
+                    <p className="text-blue-800 text-xs font-semibold">
                       User data is stored locally in the browser. Check the Admin Panel to view all accounts and reset passwords if needed.
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <Button
-                  onClick={() => setShowForgotPassword(false)}
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 rounded-lg font-medium"
-                >
-                  Got it! 👍
-                </Button>
-              </div>
+              <Button
+                onClick={() => setShowForgotPassword(false)}
+                className="w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-white hover:from-orange-600 hover:via-pink-600 hover:to-purple-600 rounded-xl font-bold py-3 shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-base"
+              >
+                Got it! 👍
+              </Button>
             </Card>
           </motion.div>
         </div>
