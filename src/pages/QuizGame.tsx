@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { challenges } from '../components/challenges';
 import { ProgressBar } from '../components/ProgressBar';
 import { ResultsProfile } from '../components/ResultsProfile';
