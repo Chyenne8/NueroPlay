@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from "framer-motion";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Sparkles, Rocket, Star, Heart, LogIn, UserPlus, HelpCircle, Key, Shield } from 'lucide-react';
