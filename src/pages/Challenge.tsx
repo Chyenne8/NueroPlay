@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router';
-import { motion } from 'motion/react';
+import { motion } from "framer-motion";
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Home, Trophy, Star } from 'lucide-react';
