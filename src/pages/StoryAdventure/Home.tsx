@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Palette, Heart, Users, Repeat, BookOpen, ArrowLeft } from "lucide-react";
 
 export default function StoryAdventureHome() {
