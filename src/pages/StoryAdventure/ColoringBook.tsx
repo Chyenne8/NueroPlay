@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Home, Palette, RotateCcw } from "lucide-react";
 
 // Coloring page templates with themes
