@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Home, Clock } from "lucide-react";
 
 type Player = "player1" | "player2";
