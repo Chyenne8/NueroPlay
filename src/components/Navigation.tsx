@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from "framer-motion";
 import { useNavigate, useLocation } from 'react-router';
 import { Home, Play, Trophy, ArrowLeft } from 'lucide-react';
 import { Button } from './ui/button';
