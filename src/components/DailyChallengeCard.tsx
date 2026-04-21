@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Star, Trophy, Sparkles } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 interface DailyChallengeCardProps {
   challengeOfDay: {
