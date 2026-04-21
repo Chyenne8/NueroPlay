@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from "framer-motion";
 import { Sparkles, Palette, Brain, Zap, Users, Star, Home, RotateCcw } from 'lucide-react';
 import { GameData } from '../types/game';
 import { Button } from './ui/button';
