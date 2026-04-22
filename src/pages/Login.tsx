@@ -96,21 +96,21 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-300 via-purple-300 to-blue-300 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-rose-300 via-fuchsia-200 to-cyan-300 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50"
+          className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-orange-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40"
           animate={{ y: [0, -40, 0], x: [0, 30, 0] }}
           transition={{ duration: 8, repeat: Infinity }}
         />
         <motion.div
-          className="absolute top-1/2 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-400 to-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50"
+          className="absolute top-1/2 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-300 to-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40"
           animate={{ y: [0, 40, 0], x: [0, -30, 0] }}
           transition={{ duration: 10, repeat: Infinity }}
         />
         <motion.div
-          className="absolute -bottom-1/2 left-1/2 w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-50"
+          className="absolute -bottom-1/2 left-1/2 w-96 h-96 bg-gradient-to-r from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40"
           animate={{ y: [0, -30, 0] }}
           transition={{ duration: 12, repeat: Infinity }}
         />
@@ -204,10 +204,10 @@ export default function Login() {
                   setIsSignup(false);
                   setError('');
                 }}
-                className={`flex-1 py-3 px-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
+                className={`flex-1 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
                   !isSignup
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg scale-105 hover:scale-110'
-                    : 'text-gray-700 hover:bg-white/40'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-xl scale-105'
+                    : 'text-gray-700 hover:bg-white/30'
                 }`}
               >
                 <LogIn className="w-5 h-5" />
@@ -218,10 +218,10 @@ export default function Login() {
                   setIsSignup(true);
                   setError('');
                 }}
-                className={`flex-1 py-3 px-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
+                className={`flex-1 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
                   isSignup
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg scale-105 hover:scale-110'
-                    : 'text-gray-700 hover:bg-white/40'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-xl scale-105'
+                    : 'text-gray-700 hover:bg-white/30'
                 }`}
               >
                 <UserPlus className="w-5 h-5" />
@@ -304,7 +304,7 @@ export default function Login() {
               >
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-yellow-500 via-pink-500 to-purple-600 text-white py-4 font-bold rounded-xl hover:from-yellow-600 hover:via-pink-600 hover:to-purple-700 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 text-lg"
+                  className="w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-white py-4 font-bold rounded-xl hover:from-orange-600 hover:via-pink-600 hover:to-purple-600 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 text-lg"
                 >
                   {isSignup ? (
                     <>
@@ -373,14 +373,14 @@ export default function Login() {
           <div className="flex justify-center gap-3 flex-wrap">
             <button
               onClick={() => navigate('/admin')}
-              className="px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl font-bold text-xs shadow-lg hover:shadow-xl transition-all hover:scale-105 inline-flex items-center gap-2"
+              className="px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-xl font-bold text-xs shadow-lg hover:shadow-xl transition-all hover:scale-105 inline-flex items-center gap-2"
             >
               <Shield className="w-4 h-4" />
               Admin Panel
             </button>
             <button
               onClick={() => navigate('/features')}
-              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl font-bold text-xs shadow-lg hover:shadow-xl transition-all hover:scale-105 inline-flex items-center gap-2"
+              className="px-4 py-2 bg-gradient-to-r from-blue-400 to-cyan-500 text-white rounded-xl font-bold text-xs shadow-lg hover:shadow-xl transition-all hover:scale-105 inline-flex items-center gap-2"
             >
               <Sparkles className="w-4 h-4" />
               Features
@@ -388,7 +388,7 @@ export default function Login() {
           </div>
           <button
             onClick={() => navigate('/caregiver-login')}
-            className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold text-xs shadow-lg hover:shadow-xl transition-all hover:scale-105 inline-flex items-center gap-2 mx-auto"
+            className="px-4 py-2 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-xl font-bold text-xs shadow-lg hover:shadow-xl transition-all hover:scale-105 inline-flex items-center gap-2 mx-auto"
           >
             <Heart className="w-4 h-4" />
             Caregiver Portal
@@ -470,7 +470,7 @@ export default function Login() {
 
               <Button
                 onClick={() => setShowForgotPassword(false)}
-                className="w-full bg-gradient-to-r from-yellow-500 via-pink-500 to-purple-600 text-white hover:from-yellow-600 hover:via-pink-600 hover:to-purple-700 rounded-xl font-bold py-3 shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-base"
+                className="w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-white hover:from-orange-600 hover:via-pink-600 hover:to-purple-600 rounded-xl font-bold py-3 shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-base"
               >
                 Got it! 👍
               </Button>
